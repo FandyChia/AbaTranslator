@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>阿巴翻译器</title>
+    <title>巴阿翻译器</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -79,20 +79,20 @@
         }
     </style>
     <script>
-        // 将文本转换为二进制，并将0和1替换为“阿”和“巴”
+        // 将文本转换为二进制，并将0和1替换为“巴”和“阿”
         function translateToBinary() {
             const input = document.getElementById("inputText").value;
             let binaryResult = '';
 
             for (let char of input) {
                 let binary = char.charCodeAt(0).toString(2).padStart(8, '0'); // 转为二进制，确保是8位
-                binaryResult += binary.replace(/0/g, '阿').replace(/1/g, '巴') + ' '; // 替换0和1
+                binaryResult += binary.replace(/0/g, '巴').replace(/1/g, '阿') + ' '; // 替换0和1
             }
 
             document.getElementById("outputText").textContent = binaryResult.trim();  // 输出结果
         }
 
-        // 将阿巴二进制翻译回文字，捕获异常统一返回“我爱你”
+        // 将巴阿二进制翻译回文字，捕获异常统一返回“我爱你”
         function decodeFromBinary() {
             const input = document.getElementById("inputText").value;
             let decodedResult = '';
@@ -101,8 +101,8 @@
                 const abaArray = input.split(' ');  // 按空格分割
 
                 for (let aba of abaArray) {
-                    // 将“阿”和“巴”替换回0和1
-                    const binary = aba.replace(/阿/g, '0').replace(/巴/g, '1');
+                    // 将“巴”和“阿”替换回0和1
+                    const binary = aba.replace(/巴/g, '0').replace(/阿/g, '1');
                     const char = String.fromCharCode(parseInt(binary, 2));  // 将二进制转换为字符
                     
                     // 检查是否是有效的可打印字符，若不是则返回“我爱你”
@@ -141,12 +141,12 @@
 </head>
 <body>
     <div class="container">
-        <h1>阿巴翻译器</h1>
+        <h1>巴阿翻译器</h1>
         <label for="inputText">请输入文本：</label>
         <input type="text" id="inputText" placeholder="输入文本" />
         <br />
-        <button onclick="translateToBinary()">翻译为阿巴语</button>
-        <button onclick="decodeFromBinary()">阿巴语翻译</button>
+        <button onclick="translateToBinary()">翻译为巴阿语</button>
+        <button onclick="decodeFromBinary()">巴阿语翻译</button>
         <br />
         <div id="outputText" class="output-text" onclick="copyToClipboard()">输出结果将在这里显示</div>
     </div>
