@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>阿巴翻译器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f4f7; /* 低饱和度的浅灰色背景 */
+            text-align: center;
+            color: #555; /* 低饱和度的灰色文字 */
+        }
+
+        h1 {
+            color: #4a6a7e; /* 低饱和度的深蓝色 */
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #ffffff; /* 白色背景 */
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            font-size: 18px;
+            color: #7a8b94; /* 低饱和度的灰蓝色 */
+        }
+
+        input[type="text"], button {
+            padding: 12px;
+            margin: 10px;
+            font-size: 16px;
+            border: 2px solid #d1d9e6; /* 低饱和度的淡灰色边框 */
+            border-radius: 4px;
+            background-color: #f0f4f8; /* 低饱和度的淡蓝色背景 */
+        }
+
+        button {
+            background-color: #a2b9c2; /* 低饱和度的灰蓝色按钮 */
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #9faeaf; /* 悬浮时的灰蓝色深色 */
+        }
+
+        .output-text {
+            padding: 12px;
+            margin-top: 20px;
+            font-size: 16px;
+            border: 2px solid #d1d9e6; /* 与输入框相同的淡灰色边框 */
+            border-radius: 4px;
+            background-color: #f9f9f9; /* 低饱和度的浅灰色背景 */
+            min-height: 40px;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+            color: #6b7c84; /* 低饱和度的灰蓝色字体 */
+        }
+
+        .copy-button {
+            background-color: #8fa3b1; /* 低饱和度的蓝灰色 */
+            color: white;
+        }
+
+        .copy-button:hover {
+            background-color: #7f8b94; /* 悬浮时的深蓝灰色 */
+        }
+
+        input[type="text"]:focus, button:focus {
+            outline: none;
+            border-color: #a8b6c1; /* 焦点时的浅蓝灰色 */
+        }
+    </style>
+    <script>
+        // 将文本转换为二进制，并将0和1替换为“阿”和“巴”
+        function translateToBinary() {
+            const input = document.getElementById("inputText").value;
+            let binaryResult = '';
+
+            for (let char of input) {
+                let binary = char.charCodeAt(0).toString(2).padStart(8, '0'); // 转为二进制，确保是8位
+                binaryResult += binary.replace(/0/g, '阿').replace(/1/g, '巴') + ' '; // 替换0和1
+            }
+
+            document.getElementById("outputText").textContent = binaryResult.trim();  // 输出结果
+        }
+
+        // 将阿巴二进制翻译回文字，捕获异常统一返回“我爱你”
+        function decodeFromBinary() {
+            const input = document.getElementById("inputText").value;
+            let decodedResult = '';
+
+            try {
+                const abaArray = input.split(' ');  // 按空格分割
+
+                for (let aba of abaArray) {
+                    // 将“阿”和“巴”替换回0和1
+                    const binary = aba.replace(/阿/g, '0').replace(/巴/g, '1');
+                    const char = String.fromCharCode(parseInt(binary, 2));  // 将二进制转换为字符
+                    
+                    // 检查是否是有效的可打印字符，若不是则返回“我爱你”
+                    if (!isValidCharacter(char)) {
+                        throw new Error("无效字符");
+                    }
+                    
+                    decodedResult += char;
+                }
+            } catch (error) {
+                decodedResult = '我爱你';  // 捕获异常后返回默认值
+            }
+
+            document.getElementById("outputText").textContent = decodedResult;  // 输出结果
+        }
+
+        // 判断字符是否是有效的可打印字符
+        function isValidCharacter(char) {
+            const code = char.charCodeAt(0);
+
+            // 判断字符是否在常见的可打印字符范围内
+            return (code >= 32 && code <= 126) || (code >= 192 && code <= 65535);
+        }
+
+        // 复制结果到剪贴板
+        function copyToClipboard() {
+            const outputText = document.getElementById("outputText");
+            const range = document.createRange();
+            range.selectNode(outputText);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+            document.execCommand("copy");
+            alert("结果已复制到剪贴板！");
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>阿巴翻译器</h1>
+        <label for="inputText">请输入文本：</label>
+        <input type="text" id="inputText" placeholder="输入文本" />
+        <br />
+        <button onclick="translateToBinary()">翻译为阿巴语</button>
+        <button onclick="decodeFromBinary()">阿巴语翻译</button>
+        <br />
+        <div id="outputText" class="output-text" onclick="copyToClipboard()">输出结果将在这里显示</div>
+    </div>
+</body>
+</html>
